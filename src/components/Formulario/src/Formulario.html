@@ -1,91 +1,146 @@
 <section class="card">
+
     <div class="card-header">
         <h3>Simulador de Plazo fijo</h3>
     </div>
 
     <div class="card-body p-3">
 
-        <form>
+        <form @submit.prevent="enviar">
 
-            <div class="form-group">
-                <label for="precio">Monto a invertir:</label>
-                <input id="precio" type="text" class="form-control w-50">
-                <div v-if="errorPrecio.mostrar" class="alert alert-danger my-1">
-                    {{ errorPrecio.mensaje}}
-                </div>
-            </div>
+            <div class="form-group mb-3">
 
+                <label for="monto">Monto a invertir:</label>
 
-            <div class="form-group">
-                <label for="capacidadTotal">Plazo en días:</label>
-                <input id="capacidadTotal" type="number" class="form-control w-50"
-                    v-model.trim="excursion.capacidadTotal" @blur="excursionDirty.capacidadTotal = true">
-                <div v-if="errorCapacidadTotal.mostrar" class="alert alert-danger my-1">
-                    {{ error.capacidadTotal.mensaje}}
-                </div>
+                <input
+                    id="monto"
+                    type="number"
+                    class="form-control w-50"
+                    v-model.number="interes.monto"
+                >
 
-            </div>
-
-            <div class="form-group">
-                <label for="capacidadTotal">TNA:</label>
-                <input id="capacidadTotal" type="number" class="form-control w-50"
-                    v-model.trim="excursion.capacidadTotal" @blur="excursionDirty.capacidadTotal = true">
-                <div v-if="errorCapacidadTotal.mostrar" class="alert alert-danger my-1">
-                    {{ error.capacidadTotal.mensaje}}
+                <div
+                    v-if="errorMonto.mostrar"
+                    class="alert alert-danger my-1"
+                >
+                    {{ errorMonto.mensaje }}
                 </div>
 
             </div>
 
+
+            <div class="form-group mb-3">
+
+                <label for="plazo">Plazo en días:</label>
+
+                <input
+                    id="plazo"
+                    type="number"
+                    class="form-control w-50"
+                    v-model.number="interes.plazo"
+                >
+
+                <div
+                    v-if="errorPlazo.mostrar"
+                    class="alert alert-danger my-1"
+                >
+                    {{ errorPlazo.mensaje }}
+                </div>
+
+            </div>
+
+
+            <div class="form-group mb-3">
+
+                <label for="tna">TNA:</label>
+
+                <input
+                    id="tna"
+                    type="number"
+                    class="form-control w-50"
+                    v-model.number="interes.tna"
+                >
+
+                <div
+                    v-if="errorTna.mostrar"
+                    class="alert alert-danger my-1"
+                >
+                    {{ errorTna.mensaje }}
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary my-3"
+            >
+                Enviar
+            </button>
+
+        </form>
 
     </div>
 
-   
 
-    <button type="submit" :class="['btn', {'btn-success':!idEditar, 'btn-warning':idEditar}, 'my-4']"
-        :disabled="validarBotonEnvio()">{{idEditar?
-        'Actualizar':'Enviar'}}
-    </button>
-    </form>
+    <div v-if="interes">
 
-    <div v-if="excursiones.length">
         <div class="table-responsive my-3">
+
             <table class="table table-striped table-hover table-bordered">
+
                 <thead>
+
                     <tr>
-                        <th>Id</th>
-                        <th>Partida</th>
-                        <th>Destino</th>
-                        <th>Día</th>
-                        <th>Nombre de Guia</th>
-                        <th>Capacidad Total</th>
-                        <th>Capacidad Ocupada</th>
-                        <th>Precio</th>
-                        <th>Acciones</th>
+                        <th>Monto</th>
+                        <th>Plazo</th>
+                        <th>TNA</th>
+                        <th>Interés Ganado</th>
+                        <th>Total Final</th>
                     </tr>
+
                 </thead>
+
                 <tbody>
-                    <tr v-for="(excursion, index) in excursiones" :key="index">
-                        <td>{{ excursion.id }}</td>
-                        <td>{{ excursion.partida }}</td>
-                        <td>{{ excursion.destino }}</td>
-                        <td>{{ excursion.dia }}</td>
-                        <td>{{ excursion.nombreGuia }}</td>
-                        <td>{{ excursion.capacidadTotal }}</td>
-                        <td>{{ excursion.capacidadOcupada }}</td>
-                        <td>{{ excursion.precio }}</td>
+
+                    <tr>
+
                         <td>
-
-                            <button
-                                :class="['btn', {'btn-warning':!ponerCancel(excursion.id), 'btn-primary':ponerCancel(excursion.id), }, 'my-1', 'me-2']"
-                                @click="editar(excursion.id)">{{ponerCancel(excursion.id)? 'Cancel':'Editar'}}</button>
-
-                            <button class="btn btn-danger my-1 me-2" @click="borrar(excursion.id)">Borrar</button>
+                            {{ interes.monto }}
                         </td>
+
+                        <td>
+                            {{ interes.plazo }}
+                        </td>
+
+                        <td>
+                            {{ interes.tna }}%
+                        </td>
+
+                        <td>
+                            {{ interesGanado(interes.monto, interes.plazo, interes.tna) }}
+                        </td>
+
+                        <td>
+                              {{ montoFinal(interes.monto, interes.plazo, interes.tna) }}
+                        </td>
+
                     </tr>
+
                 </tbody>
+
             </table>
+
         </div>
+
     </div>
-    <h4 v-else class="alert alert-danger">No se encontraron excursiones</h4>
-    </div>
+
+
+    <h4
+        v-else
+        class="alert alert-danger"
+    >
+        No se encontraron simulaciones
+    </h4>
+
 </section>

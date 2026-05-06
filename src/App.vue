@@ -1,8 +1,10 @@
 <script setup>
-import Formulario from './components/Formulario.vue'
+import Formulario from './components/Formulario/index.vue'
+import Navbar from './components/Navbar.vue';
+
 </script>
 
 <template>
-  <Formulario/>
-
+  <Navbar/>
+  <router-view />
 </template>

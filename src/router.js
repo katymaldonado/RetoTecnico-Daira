@@ -1,10 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import Formulario from "./components/Formulario/index.vue";
+import Historial from "./components/Historial.vue";
 
 
 const routes = [
-    { path: '/formulario', component: Formulario },
+    { path: '/', component: Formulario },
+    { path: '/historial', component: Historial }
     
 ]
 
